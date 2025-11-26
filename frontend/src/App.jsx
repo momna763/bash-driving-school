@@ -140,12 +140,18 @@ const socialLinks = [
 
 function App() {
   const [formStatus, setFormStatus] = useState({ type: 'idle', message: '' })
+  const [navOpen, setNavOpen] = useState(false)
 
   const smoothScroll = (id) => {
     const el = document.getElementById(id)
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
+  }
+
+  const handleNavClick = (id) => {
+    smoothScroll(id)
+    setNavOpen(false)
   }
 
   const handleContactSubmit = async (event) => {
@@ -190,23 +196,35 @@ function App() {
       </header>
 
       <div className="nav-shell">
-        <div className="brand-pill" onClick={() => smoothScroll('home')}>
+        <div className="brand-pill" onClick={() => handleNavClick('home')}>
           <img src={logo} alt="Bash Driving School logo" />
           <div>
             <span>Since 2012</span>
             <h1>Bash Driving School</h1>
           </div>
         </div>
-        <nav>
+        <button
+          className={`menu-toggle ${navOpen ? 'active' : ''}`}
+          type="button"
+          aria-label="Toggle navigation"
+          aria-expanded={navOpen}
+          onClick={() => setNavOpen((prev) => !prev)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+        <nav className={`nav-links ${navOpen ? 'open' : ''}`}>
           {navLinks.map((link) => (
-            <button key={link.id} type="button" onClick={() => smoothScroll(link.id)}>
+            <button key={link.id} type="button" onClick={() => handleNavClick(link.id)}>
               {link.label}
             </button>
           ))}
         </nav>
-        <button className="btn secondary" type="button" onClick={() => smoothScroll('contact')}>
+        <button className="btn secondary" type="button" onClick={() => handleNavClick('contact')}>
           Book a lesson
         </button>
+        <div className={`nav-overlay ${navOpen ? 'show' : ''}`} onClick={() => setNavOpen(false)} />
       </div>
 
       <main>
